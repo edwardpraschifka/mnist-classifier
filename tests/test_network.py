@@ -14,14 +14,13 @@ class TestConstructor:
 
         assert(np.array_equal(layers, nw.layers))
 
-        assert len(nw.weights) == 3
-        assert nw.weights[0].shape == (3,4)
-        assert nw.weights[1].shape == (4,2)
+        assert len(nw.weights) == 2
+        assert nw.weights[0].shape == (4,3)
+        assert nw.weights[1].shape == (2,4)
         
-        assert len(nw.biases) == 3
-        assert len(nw.biases[0]) == 3
-        assert len(nw.biases[1]) == 4
-        assert len(nw.biases[2]) == 2
+        assert len(nw.biases) == 2
+        assert nw.biases[0].shape == (4,)
+        assert nw.biases[1].shape == (2,)
 
     def test_bad_type(self):
         with pytest.raises(TypeError):
