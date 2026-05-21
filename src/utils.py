@@ -1,4 +1,3 @@
-from math import exp
 import numpy as np
 
 def cost(y_actual: np.ndarray, y: np.ndarray):
@@ -19,4 +18,6 @@ def cost(y_actual: np.ndarray, y: np.ndarray):
         
     diff_sq = (y_actual - y)**2
     return np.sum(diff_sq)
-    
+
+def sigmoid(z: int):
+    return 1/(1+np.exp(-z))
