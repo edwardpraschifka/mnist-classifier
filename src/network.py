@@ -30,19 +30,17 @@ class Network:
                              f" ({self.layers[0]}, ), but "
                              f"got shape {np.shape(X)}")
         
-        current_layer = X
+        Z = [None] * (self.size)
+        A = [None] * self.size
+        Z[0] = X
+        A[0] = X
 
-        for i in range(self.size - 1):
-            # multiply input vector by weight matrix
-            current_layer = self.weights[i] @ current_layer
+        for i in range(1, self.size):
+            Z[i] = (self.weights[i-1] @ A[i-1]) + self.biases[i-1]
+            A[i] = sigmoid(Z[i])
 
-            # add bias vector to weighted sum
-            current_layer += self.biases[i]
 
-            # call activation function
-            current_layer = sigmoid(current_layer)
-        
-        return current_layer
+        return (Z,A)
 
 
 

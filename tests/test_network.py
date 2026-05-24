@@ -67,5 +67,13 @@ class TestFeedForward:
         nw.biases[0] = np.array([0.1, 0.2, -0.1, 0.3])
         nw.biases[1] = np.array([0.1, 0.2])
 
-        out = nw.feedforward(X)
-        assert np.array_equal(np.round(out,4), np.array([0.6187, 0.6522]))
+        (Z,A) = nw.feedforward(X)        
+
+        assert len(Z) == 3
+        assert len(A) == 3
+
+        assert np.array_equal(A[0], X)
+        assert np.array_equal(np.round(Z[1],3), [0.190, 0.330, -0.040, 0.370])
+        assert np.array_equal(np.round(A[1],3), [0.547, 0.582, 0.490, 0.591])
+        assert np.array_equal(np.round(Z[2],3), [0.484, 0.629])
+        assert np.array_equal(np.round(A[2],3), [0.619, 0.652])
