@@ -44,8 +44,7 @@ class TestSigmoid:
     def test_output_vec(self):
         z = np.array([1,2,3])
         out = sigmoid(z)
-        rounded_out = np.round(out,2)
 
         expected_out = np.array([0.73, 0.88, 0.95])
 
-        assert np.array_equal(rounded_out, expected_out)
+        assert np.array_equal(np.round(out,2), expected_out)
