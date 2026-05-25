@@ -25,11 +25,18 @@ def sigmoid(z: int):
 
     return 1/(1+np.exp(-z))
 
-def shuffle_and_batch(X: np.ndarray, batch_size: int):
+def shuffle_and_batch(X: np.ndarray, Y: np.ndarray, batch_size: int):
     """Splits data into batches, returns list of batches"""
 
-    np.random.shuffle(X)
     (rows,cols) = np.shape(X)
+    
+    indices = np.random.permutation(rows)
+    
+    X = X[indices]
+    Y = Y[indices]
 
-    batches = [X[batch_size * j : batch_size * (j + 1)] for j in range(math.ceil(rows/ batch_size))]
-    return batches
+    X_batches = [X[batch_size * j : batch_size * (j + 1)] for j in range(math.ceil(rows / batch_size))]
+    Y_batches = [Y[batch_size * j : batch_size * (j + 1)] for j in range(math.ceil(rows / batch_size))]
+
+    return (X_batches, Y_batches)
+    

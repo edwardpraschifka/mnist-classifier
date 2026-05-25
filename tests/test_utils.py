@@ -1,5 +1,6 @@
 import pytest
 import numpy as np
+import math
 
 from src.utils import cost, sigmoid, shuffle_and_batch
 
@@ -51,21 +52,40 @@ class TestSigmoid:
 
 class TestMakeBatch:
     def test_batch_no_remainder(self):
-        X = np.random.rand(1000,20)
-        batches = shuffle_and_batch(X, batch_size=25)
+        rows = 1000
+        batch_size = 25
+        x_cols = 20
+        y_cols = 5
 
-        for batch in batches:
-            assert np.shape(batch) == (25,20)
+        X = np.random.rand(rows,x_cols)
+        Y = np.random.rand(rows,y_cols)
 
-        assert len(batches) == 40
+        (X_batches,Y_batches) = shuffle_and_batch(X, Y, batch_size)
+
+        for (xb, yb) in zip(X_batches,Y_batches):
+            assert np.shape(xb) == (batch_size,x_cols)
+            assert np.shape(yb) == (batch_size,y_cols)
+
+        assert len(X_batches) == rows/batch_size
+        assert len(Y_batches) == rows/batch_size
 
     def test_batch_with_remainder(self):
-        X = np.random.rand(452,10)
-        batches = shuffle_and_batch(X, batch_size=32)
+        rows = 1000
+        batch_size = 24
+        x_cols = 20
+        y_cols = 5
 
-        for batch in batches[:-1]:
-            assert np.shape(batch) == (32,10)
+        X = np.random.rand(rows,x_cols)
+        Y = np.random.rand(rows,y_cols)
+
+        (X_batches,Y_batches) = shuffle_and_batch(X, Y, batch_size)
+
+        for (xb, yb) in zip(X_batches[:-1], Y_batches[:-1]):
+            assert np.shape(xb) == (batch_size,x_cols)
+            assert np.shape(yb) == (batch_size,y_cols)
         
-        assert np.shape(batches[-1]) == (4,10)
+        assert np.shape(X_batches[-1]) == (rows % batch_size, x_cols)
+        assert np.shape(Y_batches[-1]) == (rows % batch_size, y_cols)
 
-        assert len(batches) == 15
+        assert len(X_batches) == math.ceil(rows/batch_size)
+        assert len(Y_batches) == math.ceil(rows/batch_size)
