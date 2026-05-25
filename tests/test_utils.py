@@ -1,7 +1,7 @@
 import pytest
 import numpy as np
 
-from src.utils import cost, sigmoid
+from src.utils import cost, sigmoid, make_batches
 
 class TestCostFunction:
     def test_output_pos(self):
@@ -48,3 +48,24 @@ class TestSigmoid:
         expected_out = np.array([0.73, 0.88, 0.95])
 
         assert np.array_equal(np.round(out,2), expected_out)
+
+class TestMakeBatch:
+    def test_batch_no_remainder(self):
+        X = np.random.rand(1000,20)
+        batches = make_batches(X, batch_size=25)
+
+        for batch in batches:
+            assert np.shape(batch) == (25,20)
+
+        assert len(batches) == 40
+
+    def test_batch_with_remainder(self):
+        X = np.random.rand(452,10)
+        batches = make_batches(X, batch_size=32)
+
+        for batch in batches[:-1]:
+            assert np.shape(batch) == (32,10)
+        
+        assert np.shape(batches[-1]) == (4,10)
+
+        assert len(batches) == 15

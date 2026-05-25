@@ -1,4 +1,5 @@
 import numpy as np
+import math
 
 def cost(y_actual: np.ndarray, y: np.ndarray):
     if type(y_actual) != np.ndarray: 
@@ -20,4 +21,15 @@ def cost(y_actual: np.ndarray, y: np.ndarray):
     return np.sum(diff_sq)
 
 def sigmoid(z: int):
+    """Computes sigmoid smoothing function on z"""
+
     return 1/(1+np.exp(-z))
+
+def make_batches(X: np.ndarray, batch_size: int):
+    """Splits data into batches, returns list of batches"""
+
+    np.random.shuffle(X)
+    (rows,cols) = np.shape(X)
+
+    batches = [X[batch_size * j : batch_size * (j + 1)] for j in range(math.ceil(rows/ batch_size))]
+    return batches
