@@ -23,8 +23,8 @@ class TestConstructor:
         assert nw.weights[1].shape == (2,4)
         
         assert len(nw.biases) == 2
-        assert nw.biases[0].shape == (4,)
-        assert nw.biases[1].shape == (2,)
+        assert nw.biases[0].shape == (4,1)
+        assert nw.biases[1].shape == (2,1)
 
     def test_bad_type(self):
         """Create a network using a layers array of invalid type"""

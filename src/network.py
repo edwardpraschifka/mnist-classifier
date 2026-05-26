@@ -15,7 +15,7 @@ class Network:
 
         # size of weights and biases are both size(layers) - 1
         self.weights = [np.random.rand(layers[i], layers[i-1]) for i in range(1, self.size)]
-        self.biases = [np.random.rand(layers[i]) for i in range(1, self.size)]
+        self.biases = [np.random.rand(layers[i],1) for i in range(1, self.size)]
 
     def feedforward(self, X: np.ndarray):
         """Feeds X into network, returns corresponding Y"""
