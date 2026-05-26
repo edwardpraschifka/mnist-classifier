@@ -26,9 +26,9 @@ class Network:
         
         # check that the shape of X matches
         # the number of nodes in the input layer
-        if np.shape(X) != (self.layers[0],):
+        if np.shape(X) != (self.layers[0],1):
             raise ValueError("Expected X to have shape"
-                             f" ({self.layers[0]}, ), but "
+                             f" ({self.layers[0]}, 1), but "
                              f"got shape {np.shape(X)}")
         
         Z = [None] * (self.size)
@@ -57,9 +57,9 @@ class Network:
                 raise TypeError("X expected <np.ndarray>" 
                             f", got {type(Y)}")
 
-            if np.shape(X) != (self.layers[0],):
+            if np.shape(X) != (self.layers[0],1):
                 raise ValueError("Expected X to have shape"
-                                f" ({self.layers[0]}, ), but "
+                                f" ({self.layers[0]}, 1), but "
                                 f"got shape {np.shape(X)}")
             
             if np.shape(Y) != (self.layers[-1],):

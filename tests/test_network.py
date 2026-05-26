@@ -61,15 +61,15 @@ class TestFeedForward:
 
         layers = [3,4,2]
         nw = Network(layers)
-        X = np.array([0.1, 0.1, 0.2]).reshape((3,))
+        X = np.array([0.1, 0.1, 0.2]).reshape(3,1)
 
         nw.weights[0] = np.array([[0.1, 0.2, 0.3], [0.5, 0.4, 0.2], 
                                [0.1, 0.1, 0.2], [0.3, 0.2 , 0.1]])
         nw.weights[1] = np.array([[0.2, 0.1, 0.2, 0.2], [0.3, 0.1, 0.3, 0.1]])
 
         
-        nw.biases[0] = np.array([0.1, 0.2, -0.1, 0.3])
-        nw.biases[1] = np.array([0.1, 0.2])
+        nw.biases[0] = np.array([0.1, 0.2, -0.1, 0.3]).reshape(4,1)
+        nw.biases[1] = np.array([0.1, 0.2]).reshape(2,1)
 
         (Z,A) = nw.feedforward(X)        
 
@@ -77,10 +77,10 @@ class TestFeedForward:
         assert len(A) == 3
 
         assert np.array_equal(A[0], X)
-        assert np.array_equal(np.round(Z[1],3), [0.190, 0.330, -0.040, 0.370])
-        assert np.array_equal(np.round(A[1],3), [0.547, 0.582, 0.490, 0.591])
-        assert np.array_equal(np.round(Z[2],3), [0.484, 0.629])
-        assert np.array_equal(np.round(A[2],3), [0.619, 0.652])
+        assert np.array_equal(np.round(Z[1],3), np.array([0.190, 0.330, -0.040, 0.370]).reshape(4,1))
+        assert np.array_equal(np.round(A[1],3), np.array([0.547, 0.582, 0.490, 0.591]).reshape(4,1))
+        assert np.array_equal(np.round(Z[2],3), np.array([0.484, 0.629]).reshape(2,1))
+        assert np.array_equal(np.round(A[2],3), np.array([0.619, 0.652]).reshape(2,1))
 
 
 class TestBackProp:
@@ -90,14 +90,14 @@ class TestBackProp:
 
         layers = [3,4,2]
         nw = Network(layers)
-        X = np.array([0.1, 0.1, 0.2]).reshape((3,))
+        X = np.array([0.1, 0.1, 0.2]).reshape(3,1)
 
         nw.weights[0] = np.random.randn(4,3)
         nw.weights[1] = np.random.randn(2,4)
 
         
-        nw.biases[0] = np.random.randn(4,)
-        nw.biases[1] = np.random.randn(2,)
+        nw.biases[0] = np.random.randn(4,1)
+        nw.biases[1] = np.random.randn(2,1)
 
         Y = np.array([1, 0]).reshape((2,))
 
@@ -128,7 +128,7 @@ class TestBackProp:
 
         layers = [20,50,40,30,20,10]
         nw = Network(layers)
-        X = np.random.rand(20,)
+        X = np.random.rand(20,1)
 
         nw.weights = [np.random.rand(layers[i+1],layers[i]) for i in range(nw.size - 1)]
         nw.biases = [np.random.rand(layers[i],) for i in range(1, nw.size)]
