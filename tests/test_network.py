@@ -3,8 +3,8 @@ import numpy as np
 import torch
 
 from src.network import Network
-from src.utils import cost
-from tests.utils import backprop_torch, average_loss_torch
+from src.utils import cost, accuracy
+from tests.utils import backprop_torch, average_loss_torch, get_mnist_data
 
 class TestConstructor:
 
@@ -204,3 +204,40 @@ class TestBackProp:
             assert np.shape(nw.biases[i]) == (layers[i+1],1)
             assert np.allclose(grad_w[i], grad_w_torch[i])
             assert np.allclose(grad_b[i], grad_b_torch[i].reshape(-1,1))
+
+
+class TestGradientDescent:
+    
+    def test_overfits_single_example(self):
+        """Test if model overfits to
+        a dataset with a single example"""
+
+        layers = [3, 4, 2]
+        nw = Network(layers)
+        
+        X = np.array([[0.1, 0.2, 0.3]])
+        Y = np.array([[0.8, 0.2]])
+        
+        nw.gradient_descent(X, Y, batch_size=1, step=0.1, epochs=1000)
+        avg_loss = nw.average_loss(X, Y)
+
+        assert np.allclose(avg_loss, 0)
+    
+    @pytest.mark.skip(reason="model not yet sufficently optimized")
+    def test_mnist_output(self):
+        """Test model performance on MNIST"""
+
+        layers = [784, 128, 64, 10]
+        nw = Network(layers)
+        
+        (X_train, Y_train, X_test, Y_test) = get_mnist_data()
+
+        nw.gradient_descent(X_train, Y_train, batch_size=32, step=0.1, epochs=10, display=True)
+
+        feedforward_results = [nw.feedforward(row.reshape(-1, 1)) for row in X_test]
+        predictions = np.array([A[-1].flatten() for (Z, A) in feedforward_results])
+
+        acc = accuracy(predictions, Y_test)
+        print(f"accuracy = {acc}")
+
+        assert acc > 0.9
