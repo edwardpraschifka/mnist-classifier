@@ -90,9 +90,9 @@ class TestFeedForward:
         X = np.random.randn(1000,20)
         torch_output = feedforward_torch(X.T, nw)
 
-        my_output = nw.feedforward_vec(X.T)
+        (Z,my_output) = nw.feedforward_vec(X.T)
         
-        assert np.allclose(torch_output, my_output)
+        assert np.allclose(torch_output, my_output[-1])
 
         
 
@@ -139,7 +139,7 @@ class TestAverageLoss:
     
 
     def test_output(self):
-        """Test accuracty of output"""
+        """Test accuracy of output"""
 
         layers = [3,4,2]
         nw = Network(layers)
@@ -220,6 +220,32 @@ class TestBackProp:
             assert np.allclose(grad_w[i], grad_w_torch[i])
             assert np.allclose(grad_b[i], grad_b_torch[i].reshape(-1,1))
 
+
+    def test_output_vec(self):
+        """Test accuracy of backprop_vec method"""
+
+        layers = [20,50,40,30,20,10]
+        nw = Network(layers)
+
+        # 1000 training examples
+        X = np.random.rand(20,1000)
+        Y = np.random.rand(10,1000)
+
+        nw.weights = [np.random.rand(layers[i],layers[i-1]) for i in range(1, nw.size)]
+        nw.biases = [np.random.rand(layers[i],1) for i in range(1, nw.size)]
+
+        # compute grad_w and grad_b using our function
+        (grad_w, grad_b) = nw.backprop_vec(X,Y)
+        
+        # test against grad_w and grad_b 
+        # computed using pytorch
+        (grad_w_torch,grad_b_torch) = backprop_torch(X, Y, nw)   
+
+        for gw, gwt in zip(grad_w, grad_w_torch):
+            assert np.allclose(gw, gwt)
+
+        for gb, gbt in zip(grad_b, grad_b_torch):
+            assert np.array_equal(np.shape(gb), np.shape(gbt))
 
 class TestGradientDescent:
     

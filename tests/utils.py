@@ -1,6 +1,9 @@
 import numpy as np
 import torch
+import torch.nn as nn
 from tensorflow.keras.datasets import mnist
+
+
 
 from src.network import Network
 
@@ -23,9 +26,6 @@ def backprop_torch(X: np.ndarray, Y: np.ndarray, nw: Network):
     cost.backward()
     
     return [W.grad.detach().numpy() for W in Ws], [B.grad.detach().numpy() for B in Bs]
-
-import torch
-import torch.nn as nn
 
 
 def average_loss_torch(X: np.ndarray, Y: np.ndarray, nw: Network):

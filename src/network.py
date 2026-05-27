@@ -63,10 +63,9 @@ class Network:
             Z[i] = (self.weights[i-1] @ A[i-1]) + self.biases[i-1]
             A[i] = sigmoid(Z[i])
         
-        return A[-1]
+        return (Z,A)
 
 
-    
     def average_loss(self, X: np.ndarray, Y: np.ndarray):
         """Takes a set of training examples, and returns
         the network's average loss across the set"""
@@ -105,7 +104,7 @@ class Network:
         return result/rows
 
 
-    def backprop(self, X, Y):
+    def backprop(self, X: np.ndarray, Y: np.ndarray):
             """Returns partial derivatives of cost function
                 with respect to all weights and biases for a
                 given training example"""
@@ -157,6 +156,61 @@ class Network:
 
                 grad_w[i-1] = dcdw
                 grad_b[i-1] = dcdb
+
+                dzda0 = self.weights[i-1]
+
+                # update dcda for next layer
+                dcda = dzda0.T @ dcdz 
+            
+            return (grad_w, grad_b)
+    
+
+    def backprop_vec(self, X: np.ndarray, Y: np.ndarray):
+            """Returns partial derivatives of cost function
+                with respect to all weights and biases for matrices
+                X and Y, whose columns are training examples"""
+            
+            if type(X) != np.ndarray:
+                raise TypeError("X expected <np.ndarray>" 
+                            f", got {type(X)}")
+            
+            if type(Y) != np.ndarray:
+                raise TypeError("X expected <np.ndarray>" 
+                            f", got {type(Y)}")
+
+            if np.shape(X)[1] != np.shape(Y)[1]:
+                raise ValueError("Shape mismatch: X has "
+                                 f"{np.shape(X)[1]} columns"
+                                 f", but Y has {np.shape(Y)[1]} columns")
+            
+            grad_w = self.weights.copy()
+            grad_b = self.biases.copy()
+
+            (Z, A) = self.feedforward_vec(X)        
+
+            # derivative of cost function with respect
+            # to activations of output layer
+            dcda = 2 * (A[-1] - Y)
+
+            for i in range(self.size - 1, 0, -1):
+                # c = cost function
+                # a = activation value vector for current layer
+                # z = pre-activation value vector for current layer
+                # w = weight vector for current layer
+                # b = bias vector for current layer.
+                # a0 = activation value vector for next layer
+                
+                dadz = sigmoid(Z[i]) * (1 - sigmoid(Z[i]))
+                dcdz = (dcda * dadz)
+
+                dzdw = A[i-1]
+              
+                
+                dcdw = dcdz @ dzdw.T
+                dcdb = np.sum(dcdz, axis=1)
+
+                grad_w[i-1] = dcdw
+                grad_b[i-1] = dcdb.reshape(-1,1)
 
                 dzda0 = self.weights[i-1]
 
