@@ -183,6 +183,7 @@ class Network:
                                  f"{np.shape(X)[1]} columns"
                                  f", but Y has {np.shape(Y)[1]} columns")
             
+            
             grad_w = self.weights.copy()
             grad_b = self.biases.copy()
 
@@ -245,6 +246,34 @@ class Network:
                     for i in range(self.size - 1):
                         avg_grad_w[i] += grad_w[i]/batch_size
                         avg_grad_b[i] += grad_b[i]/batch_size
+                
+                for i in range(self.size - 1):
+                    self.weights[i] -= step * avg_grad_w[i]
+                    self.biases[i] -= step * avg_grad_b[i]
+
+            
+    def gradient_descent_vec(self, X: np.ndarray, Y: np.ndarray, batch_size=32, 
+                         step=0.1, epochs=10, display=False):
+        """Performs gradient descent, modifying self.weights
+            and self.biases in-place"""
+        
+        for e in range(epochs):
+            (X_batches, Y_batches) = shuffle_and_batch(X, Y, batch_size)
+
+            for xb, yb, i in zip(X_batches, Y_batches, range(len(X_batches))):
+
+                if display==True:
+                    print(f"[epoch {e}] processed {i}/{len(X_batches)}")
+
+                avg_grad_w = [np.zeros(np.shape(self.weights[i])) for i in range(self.size - 1)]
+                avg_grad_b = [np.zeros(np.shape(self.biases[i])) for i in range(self.size - 1)]
+
+                # run forward pass & backprop
+                (grad_w, grad_b) = self.backprop_vec(xb.T, yb.T)
+
+                for i in range(self.size - 1):
+                    avg_grad_w[i] += grad_w[i]/len(xb)
+                    avg_grad_b[i] += grad_b[i]/len(xb)
                 
                 for i in range(self.size - 1):
                     self.weights[i] -= step * avg_grad_w[i]
