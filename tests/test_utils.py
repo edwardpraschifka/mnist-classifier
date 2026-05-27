@@ -18,13 +18,6 @@ class TestCostFunction:
 
         out = cost(y1,y2)
         assert out == 155
-
-    def test_bad_type(self):
-        y1 = list([])
-        y2 = np.array([])
-
-        with pytest.raises(TypeError):
-            out = cost(y1,y2)
     
     def test_bad_shape(self):
         y1 = np.array([1,2,3])

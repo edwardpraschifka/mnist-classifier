@@ -3,14 +3,6 @@ import math
 
 def cost(y_actual: np.ndarray, y: np.ndarray):
     """Computes the difference between two (n,1) vectors"""
-
-    if type(y_actual) != np.ndarray: 
-        raise TypeError("y_actual expected <np.ndarray>"
-                        f", got {type(y_actual)}")
-    
-    if type(y) != np.ndarray: 
-        raise TypeError("y expected <np.ndarray>" 
-                        f", got {type(y)}")
     
     if np.shape(y_actual) != (len(y_actual),1): 
         raise ValueError("y_actual: expected shape "

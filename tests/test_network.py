@@ -26,25 +26,8 @@ class TestConstructor:
         assert nw.biases[0].shape == (4,1)
         assert nw.biases[1].shape == (2,1)
 
-    def test_bad_type(self):
-        """Create a network using a layers array of invalid type"""
-
-        with pytest.raises(TypeError):
-            layers = np.array([])
-            nw = Network(layers)
-
 
 class TestFeedForward:
-
-    def test_bad_type(self):
-        """Try feedforward using an input array of invalid type"""
-
-        layers = [3,4,2]
-        nw = Network(layers)
-        X = [1,2,3]
-
-        with pytest.raises(TypeError):
-            nw.feedforward(X)
 
     def test_diff_len(self):
         """Try feedforward using an input array of invalid length"""

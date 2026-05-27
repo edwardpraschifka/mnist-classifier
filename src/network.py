@@ -5,10 +5,6 @@ from .utils import cost, sigmoid, shuffle_and_batch
 class Network:
     def __init__(self, layers: np.ndarray):
         """Creates a new network, where layer i has layers[i] nodes"""
-
-        if type(layers) != list: 
-            raise TypeError("layers expected <class 'list'>" 
-                        f", got {type(layers)}")
     
         self.layers = layers
         self.size = len(layers)
@@ -22,11 +18,6 @@ class Network:
         """Feeds a matrix X whose columns are training
         examples into the network, returns corresponding Y
         whose columns are the predicted values"""
-
-        if type(X) != np.ndarray: 
-            raise TypeError("X expected <np.ndarray>" 
-                        f", got {type(X)}")
-
          
         Z = [0] * self.size
         A = [0] * self.size
@@ -82,14 +73,6 @@ class Network:
             """Returns partial derivatives of cost function
                 with respect to all weights and biases for matrices
                 X and Y, whose columns are training examples"""
-            
-            if type(X) != np.ndarray:
-                raise TypeError("X expected <np.ndarray>" 
-                            f", got {type(X)}")
-            
-            if type(Y) != np.ndarray:
-                raise TypeError("X expected <np.ndarray>" 
-                            f", got {type(Y)}")
 
             if np.shape(X)[1] != np.shape(Y)[1]:
                 raise ValueError("Shape mismatch: X has "
