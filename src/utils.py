@@ -35,18 +35,18 @@ def accuracy(y_actual: np.ndarray, y: np.ndarray):
     one-hot labels"""
 
     # both sets should have the same number
-    # of training examples
+    # of categories
     if np.shape(y_actual)[0] != np.shape(y)[0]: 
         raise ValueError("Shape mismatch: y has "
                         f"{np.shape(y)[0]} rows, "
                         f"but y_actual has {np.shape(y_actual)[0]} rows")
     
     # each training example should have the same
-    # number of columns
+    # number of training examples
     if np.shape(y_actual)[1] != np.shape(y)[1]: 
         raise ValueError("Shape mismatch: y has "
                         f"{np.shape(y)[1]} rows, "
-                        f"but y_actual has {np.shape(y_actual)[1]} rows")
+                        f"but y_actual has {np.shape(y_actual)[1]} columns")
     
-    accuracy = (np.argmax(y_actual, axis=1) == np.argmax(y, axis=1)).sum() / len(y)
+    accuracy = (np.argmax(y_actual, axis=0) == np.argmax(y, axis=0)).sum() / np.shape(y_actual)[1]
     return accuracy 

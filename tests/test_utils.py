@@ -2,7 +2,7 @@ import pytest
 import numpy as np
 import math
 
-from src.utils import cost, sigmoid, shuffle_and_batch
+from src.utils import sigmoid, shuffle_and_batch, accuracy
 
 class TestSigmoid:
     def test_output_int(self):
@@ -71,3 +71,27 @@ class TestMakeBatch:
 
         assert len(X_batches) == math.ceil(cols/batch_size)
         assert len(Y_batches) == math.ceil(cols/batch_size)
+
+class TestAccuracy:
+    def test_output(self):
+        y_actual = np.zeros((10,100))
+        y_predicted = np.zeros((10,100))
+
+        # Suppose that label 0
+        # is predicted for every training
+        # example in y_actual
+        y_actual[0, :] = 1
+
+        # suppose that label 9
+        # is predicted for every training
+        # example in y
+        y_predicted[9, :] = 0.1
+
+        for i in range(10):
+            # change prediction to label 0
+            # for the first i * 10 examples
+            acc = accuracy(y_actual, y_predicted)
+            assert np.allclose(acc, i * 0.1)
+
+            y_predicted[0, i: (i+1)*10] = 1
+

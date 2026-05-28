@@ -100,7 +100,6 @@ class TestGradientDescent:
 
         assert acc > 0.9
     
-    @pytest.mark.skip(reason="Feature is currently broken")
     def test_mnist_output(self):
         """Test model performance on MNIST"""
 
@@ -109,12 +108,11 @@ class TestGradientDescent:
         
         (X_train, Y_train, X_test, Y_test) = get_mnist_data()
 
-        nw.gradient_descent(X_train.T, Y_train.T, batch_size=32, step=0.1, epochs=1, display=True)
+        nw.gradient_descent(X_train.T, Y_train.T, batch_size=32, step=0.1, epochs=10, display=True)
 
         feedforward_results = [nw.feedforward(row.reshape(-1, 1)) for row in X_test]
         predictions = np.array([A[-1].flatten() for (Z, A) in feedforward_results])
 
         acc = accuracy(predictions, Y_test)
-        print(f"accuracy = {acc}")
 
         assert acc > 0.9
