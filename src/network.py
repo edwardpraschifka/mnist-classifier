@@ -11,8 +11,8 @@ class Network:
         self.size = len(layers)
 
         # size of weights and biases are both size(layers) - 1
-        self.weights = [np.random.rand(layers[i], layers[i-1]) for i in range(1, self.size)]
-        self.biases = [np.random.rand(layers[i],1) for i in range(1, self.size)]
+        self.weights = [np.random.randn(layers[i], layers[i-1]) * np.sqrt(1/layers[i-1]) for i in range(1, self.size)]
+        self.biases = [np.zeros((layers[i], 1)) for i in range(1, self.size)]
     
     def save(self, filename):
         """Saves network to file"""
@@ -108,7 +108,7 @@ class Network:
                 # b = bias vector for current layer.
                 # a0 = activation value vector for next layer
                 
-                dadz = sigmoid(Z[i]) * (1 - sigmoid(Z[i]))
+                dadz = A[i] * (1 - A[i])
                 dcdz = (dcda * dadz)
 
                 dzdw = A[i-1]

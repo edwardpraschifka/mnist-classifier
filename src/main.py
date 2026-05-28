@@ -13,7 +13,7 @@ def test_mnist():
 
     feedforward_results = [nw.feedforward(row.reshape(-1, 1)) for row in X_test]
     predictions = np.array([A[-1].flatten() for (Z, A) in feedforward_results])
-    acc = accuracy(predictions, Y_test)
+    acc = accuracy(predictions.T, Y_test.T)
 
     print(f"Accuracy = {acc*100}%")
     
